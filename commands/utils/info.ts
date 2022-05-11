@@ -114,7 +114,7 @@ export default class Help extends Command {
 
 						embed.setTitle(`Info command`);
 						embed.addFields(
-							{
+							[{
 								name: "Name",
 								value: `\`${cmdData.data.name}\``,
 								inline: true,
@@ -143,7 +143,7 @@ export default class Help extends Command {
 								name: "Bot Permissions",
 								value: `\`${cmdData.clientPerms.join(", ")}\``,
 								inline: true,
-							}
+							}]
 						);
 
 						return interaction.reply({ embeds: [embed] });

@@ -128,12 +128,13 @@ export default class Timers extends Command {
 									cicles * 25
 								}\` minutes in total.`
 							)
-							.addFields({
+							.addFields([{
+								
 								name: "`🌐` | ID:",
 								value: `> \`${id}\``,
 								inline: true,
-							})
-							.addFields({
+							}])
+							.addFields([{
 								name: "`⌛` | Break time:",
 								value: `> in \`${
 									!isStarted
@@ -141,7 +142,7 @@ export default class Timers extends Command {
 										: `${isStarted - Date.now()}`
 								}\` minutes`,
 								inline: true,
-							});
+							}]);
 
 						return interaction.reply({ embeds: [embed] });
 					},
@@ -213,8 +214,8 @@ export default class Timers extends Command {
 							.setStyle(ButtonStyle.Secondary);
 						const row =
 							new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-								button_left,
-								button_right
+								[button_left,
+								button_right]
 							);
 						if (!task)
 							return client.handleError({
@@ -257,7 +258,7 @@ export default class Timers extends Command {
 							}
 						);
 						const temp = allTasks.slice(0, 3);
-						embed.addFields(...temp);
+						embed.addFields([...temp]);
 
 						let pages = Math.ceil(allTasks.length / 3) || 1;
 						let currentPage = 0;
@@ -306,7 +307,7 @@ export default class Timers extends Command {
 									updatedEmbed.setDescription(
 										`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
 									);
-									updatedEmbed.addFields(...currentEmbed);
+									updatedEmbed.addFields([...currentEmbed]);
 									updatedEmbed.setFooter({
 										text: `Page ${
 											currentPage + 1
@@ -320,8 +321,8 @@ export default class Timers extends Command {
 										embeds: [updatedEmbed],
 										components: [
 											new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-												button_left,
-												button_right
+												[button_left,
+												button_right]
 											),
 										],
 									});
@@ -336,7 +337,7 @@ export default class Timers extends Command {
 									updatedEmbed.setDescription(
 										`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
 									);
-									updatedEmbed.addFields(...currentEmbed);
+									updatedEmbed.addFields([...currentEmbed]);
 									updatedEmbed.setFooter({
 										text: `Page ${
 											currentPage + 1
@@ -350,8 +351,8 @@ export default class Timers extends Command {
 										embeds: [updatedEmbed],
 										components: [
 											new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-												button_left,
-												button_right
+												[button_left,
+												button_right]
 											),
 										],
 									});

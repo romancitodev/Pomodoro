@@ -45,7 +45,7 @@ export default class UserInfo extends Command {
 						})}`
 					)
 					.addFields(
-						{
+						[{
 							name: "Username",
 							value: `${member.user.tag}`,
 							inline: false,
@@ -63,7 +63,7 @@ export default class UserInfo extends Command {
 							name: "Roles",
 							value: `${member_roles || "`None`"}`,
 							inline: false,
-						}
+						}]
 					);
 
 				return interaction.reply({ embeds: [embed] });

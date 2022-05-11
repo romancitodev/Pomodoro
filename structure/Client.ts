@@ -15,7 +15,7 @@ import DataBase from "./DataBase";
 import CustomError from "./Errors";
 
 export class Pomodoro extends Client {
-	owner: User | undefined;
+	owner: User | null;
 	token = Bot_Token;
 	commands: Collection<string, any> = new Collection();
 	colors;
@@ -53,6 +53,7 @@ export class Pomodoro extends Client {
 			configuration.mongoData.username,
 			configuration.mongoData.password
 		);
+		this.owner = this.application?.owner as User;
 	}
 
 	public async init() {
@@ -62,7 +63,6 @@ export class Pomodoro extends Client {
 			this.logger.log("Database initialized!");
 		});
 		super.login(this.token);
-		this.owner = this.users.cache.get("401845716991082496");
 	}
 
 	private async loadCommands(): Promise<void> {

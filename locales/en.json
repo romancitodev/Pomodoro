@@ -1,0 +1,9 @@
+{
+    "ping": {
+        "embed":{
+            "before": "`💻` Pinging...",
+            "title": "`☁` Pinged!",
+            "description": "> `{emojiping}` Message Latency: {ping}ms\n> `{emojitime}` API Latency: {time}ms"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "ping": {
+        "embed":{
+            "before": "`💻` Pingeando...",
+            "title": "`☁` Pong!",
+            "description": "> `{emojiping}` Latencia de mensajes: {ping}ms\n> `{emojitime}` Tiempo de respuesta: {time}ms"
+        }
+    }
+}

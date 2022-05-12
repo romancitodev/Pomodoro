@@ -13,6 +13,7 @@ import Logger from "./ConsoleColors";
 import { Command } from "./Command";
 import DataBase from "./DataBase";
 import CustomError from "./Errors";
+import LanguageManager from "./LanguageManager";
 
 export class Pomodoro extends Client {
 	owner: User | null;
@@ -21,6 +22,7 @@ export class Pomodoro extends Client {
 	colors;
 	logger = new Logger();
 	database;
+	lang = new LanguageManager({ lang: 'es' })
 	constructor() {
 		super({
 			intents: [

@@ -5,5 +5,38 @@
             "title": "`☁` Pong!",
             "description": "> `{emojiping}` Latencia de mensajes: {ping}ms\n> `{emojitime}` Tiempo de respuesta: {time}ms"
         }
-    }
+    },
+    "userinfo": {
+        "none":"`ninguno`",
+        "embed": {
+            "title": "Informacion sobre {user}",
+            "fields": {
+                "name": "Nombre",
+                "status": "Estado",
+                "roles":"roles"
+            }
+        }
+    },
+	"info": {
+		"category": {
+			"title": "\\{emoji} | {category} ({commands}) comandos!"
+		},
+		"command": {
+			"error01": {
+				"error": "Comando no encontrado.",
+				"description": "El comando no existe \\:(."
+			},
+			"embed": {
+				"title": "Info del comando",
+				"fields": {
+                    "command_name": "Nombre:",
+                    "description": "Descripcion:",
+                    "category": "Categoria:",
+                    "cooldown": "Cooldown:",
+                    "userperms": "Permisos del usuario:",
+                    "botperms": "Permisos del bot:"
+                }
+			}
+		}
+	}
 }

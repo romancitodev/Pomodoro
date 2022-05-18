@@ -1,9 +1,42 @@
 {
-    "ping": {
-        "embed":{
-            "before": "`💻` Pinging...",
-            "title": "`☁` Pinged!",
-            "description": "> `{emojiping}` Message Latency: {ping}ms\n> `{emojitime}` API Latency: {time}ms"
-        }
-    }
+	"ping": {
+		"embed": {
+			"before": "`💻` Pinging...",
+			"title": "`☁` Pinged!",
+			"description": "> `{emojiping}` Message Latency: {ping}ms\n> `{emojitime}` API Latency: {time}ms"
+		}
+	},
+	"userinfo": {
+		"none": "`none`",
+		"embed": {
+			"title": "{user}'s Info",
+			"fields": {
+				"name": "Username",
+				"status": "staus",
+				"roles": "roles"
+			}
+		}
+	},
+	"info": {
+		"category": {
+			"title": "\\{emoji} | {category} ({commands}) commands"
+		},
+		"command": {
+			"error01": {
+				"error": "Command not found.",
+				"description": "The name of the command doesn't exist."
+			},
+			"embed": {
+				"title": "Info command",
+				"fields": {
+                    "command_name": "Name:",
+                    "description": "Description:",
+                    "category": "Category:",
+                    "cooldown": "Cooldown:",
+                    "userperms": "User perms:",
+                    "botperms": "Bot perms:"
+                }
+			}
+		}
+	}
 }

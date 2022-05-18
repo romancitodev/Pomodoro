@@ -36,7 +36,7 @@ export default class UserInfo extends Command {
 				const member_status = member.presence?.status;
 
 				const embed = new EmbedBuilder()
-					.setTitle(`${member.user.tag}'s information`)
+					.setTitle(await client.lang.format_message('userinfo.embed.title', { words: { user: member.user.tag } }))
 					.setColor(client.colors.Invisible)
 					.setThumbnail(
 						`${member.user.displayAvatarURL({
@@ -46,12 +46,12 @@ export default class UserInfo extends Command {
 					)
 					.addFields(
 						[{
-							name: "Username",
+							name: await client.lang.format_message('userinfo.embed.fields.name'),
 							value: `${member.user.tag}`,
 							inline: false,
 						},
 						{
-							name: "Status",
+							name:  await client.lang.format_message('userinfo.embed.fields.status'),
 							value: `${`${
 								member_status !== undefined
 									? Status[member_status]
@@ -60,8 +60,8 @@ export default class UserInfo extends Command {
 							inline: false,
 						},
 						{
-							name: "Roles",
-							value: `${member_roles || "`None`"}`,
+							name: await client.lang.format_message('userinfo.embed.fields.roles'),
+							value: `${member_roles || await client.lang.format_message('userinfo.none')}`,
 							inline: false,
 						}]
 					);

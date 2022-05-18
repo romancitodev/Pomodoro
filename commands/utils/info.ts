@@ -70,7 +70,7 @@ export default class Help extends Command {
 							];
 
 						embed.setTitle(
-							`\\${emoji} | ${category} (${commands.length}) commands`
+							await client.lang.format_message('info.category.title',{ words: { emoji, category, commands: commands.length }})
 						);
 						embed.setDescription(
 							`${commands
@@ -98,49 +98,46 @@ export default class Help extends Command {
 							"command",
 							true
 						);
-						const cmd: Command = client.commands.find((c) => {
-							const i = new c.default() as Command;
-							return i.options.data.name === command;
-						});
+						const cmd: Command = new (client.commands.get(command)).default();
 
 						if (!cmd)
 							return client.handleError({
-								error: "Command not found.",
+								error: await client.lang.format_message('info.command.error01.error'),
 								description:
-									"The name of the command doesn't exists.",
+									await client.lang.format_message('info.command.error01.description'),
 							});
 
 						const cmdData = cmd.options;
 
-						embed.setTitle(`Info command`);
+						embed.setTitle(await client.lang.format_message('info.command.embed.title'));
 						embed.addFields(
 							[{
-								name: "Name",
+								name: await client.lang.format_message('info.command.embed.fields.command_name'),
 								value: `\`${cmdData.data.name}\``,
 								inline: true,
 							},
 							{
-								name: "Description",
+								name: await client.lang.format_message('info.command.embed.fields.description'),
 								value: `\`${cmdData.data.description}\``,
 								inline: true,
 							},
 							{
-								name: "Category",
+								name: await client.lang.format_message('info.command.embed.fields.category'),
 								value: `\`${cmdData.category}\``,
 								inline: true,
 							},
 							{
-								name: "Cooldown",
+								name: await client.lang.format_message('info.command.embed.fields.cooldown'),
 								value: `\`${cmdData.cooldown}\``,
 								inline: true,
 							},
 							{
-								name: "User Permissions",
+								name: await client.lang.format_message('info.command.embed.fields.userperms'),
 								value: `\`${cmdData.userPerms.join(", ")}\``,
 								inline: true,
 							},
 							{
-								name: "Bot Permissions",
+								name: await client.lang.format_message('info.command.embed.fields.botperms'),
 								value: `\`${cmdData.clientPerms.join(", ")}\``,
 								inline: true,
 							}]

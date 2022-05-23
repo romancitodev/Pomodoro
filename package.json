@@ -1,0 +1,27 @@
+{
+	"name": "pomodoro-bot",
+	"version": "1.10.3",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "npx ts-node index.ts",
+		"push" : " git push \"https://github.com/ChirujanoCodding/Pomodoro\" --force"
+	},
+	"keywords": [],
+	"author": "ElShyrux",
+	"license": "ISC",
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.22.0",
+		"@typescript-eslint/parser": "^5.22.0",
+		"eslint": "^8.15.0",
+		"eslint-config-google": "^0.14.0",
+		"tslint": "^5.12.1"
+	},
+	"dependencies": {
+		"@types/uuid": "^8.3.4",
+		"chalk": "^4.1.2",
+		"discord.js": "^14.0.0-dev.1651493371-4ba0f56",
+		"mongoose": "^6.3.1",
+		"uuid": "^8.3.2"
+	}
+}

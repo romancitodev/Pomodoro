@@ -11,7 +11,7 @@ export default class DataBase {
 
 	public async init() {
 		await mongoose.connect(
-			`mongodb+srv://${this.username}:${this.password}@bots.egbdf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+			`mongodb+srv://${this.username}:${this.password}@cluster0.ekstv.mongodb.net/?retryWrites=true&w=majority`
 		);
 	}
 

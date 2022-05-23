@@ -1,4 +1,3 @@
 node_modules
 configuration/config.ts
-package.json
 package-lock.json

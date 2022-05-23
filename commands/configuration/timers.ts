@@ -360,7 +360,7 @@ export default class Timers extends Command {
 							}
 						});
 
-						collector?.on("end", async (collected) => {
+						collector?.on("end", async (_collected) => {
 							interaction.editReply({
 								components: [],
 								content: "se acabó el tiempo",

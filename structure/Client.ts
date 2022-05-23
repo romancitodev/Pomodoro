@@ -63,7 +63,7 @@ export class Pomodoro extends Client {
 		this.loadEvents();
 		this.database.init().then(() => {
 			this.logger.log("Database initialized!");
-		});
+		}).catch((_err:any) => { this.logger.warn("Database not initialized!") });
 		super.login(this.token);
 	}
 
@@ -139,7 +139,7 @@ export class Pomodoro extends Client {
 		interaction: Interaction<"cached">;
 		cmd: any;
 	}) {
-		const command: Command = new cmd.default();
+		const command: Command = cmd;
 		if (interaction.member.permissions.has(command.options.userPerms))
 			return Promise.resolve();
 		else
@@ -162,7 +162,7 @@ export class Pomodoro extends Client {
 		interaction: Interaction<"cached">;
 		cmd: any;
 	}) {
-		const command: Command = new cmd.default();
+		const command: Command = cmd;
 		if (interaction.guild.me?.permissions.has(command.options.clientPerms))
 			return Promise.resolve();
 		else

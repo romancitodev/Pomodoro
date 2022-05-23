@@ -32,7 +32,7 @@ export default class LanguageManager {
 		const json = await import(`../locales/${lang}.json`);
 		const value = this.get_value(key_split, json);
 		if (typeof value != 'string') throw new Error(`Language key ${key} not found!`);
-			return value.replace(/{(.*?)}/g, (match, p1) => {
+			return value.replace(/{(.*?)}/g, (_match, p1) => {
 				return options.words[p1];
 			})
     }

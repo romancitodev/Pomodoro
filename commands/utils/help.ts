@@ -1,7 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../structure/Command";
 
-const categoryArray = ["Utils", "Fun", "Configuration"];
+//const categoryArray = ["Utils", "Fun", "Configuration"];
 
 export default class help extends Command {
 	constructor() {

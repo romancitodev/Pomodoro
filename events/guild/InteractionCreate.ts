@@ -7,12 +7,12 @@ import { Pomodoro } from "../../structure/Client";
 import CustomError from "../../structure/Errors";
 import { Event } from "../../structure/Events";
 import { Command } from "../../structure/Command";
-
+import CooldownManager from "../../structure/CooldownManager";
 export default class IntCreate extends Event {
 	constructor(client: Pomodoro) {
 		super(client, "interactionCreate");
 	}
-
+	cooldown = new CooldownManager();
 	public async run(
 		interaction:
 			| Interaction<"cached">
@@ -64,6 +64,7 @@ export default class IntCreate extends Event {
 					interaction,
 					cmd,
 				});
+				await this.cooldown.checkCooldown(interaction, cmd);
 			} catch (err: any) {
 				if (err instanceof CustomError)
 					return interaction.reply({
@@ -78,6 +79,7 @@ export default class IntCreate extends Event {
 						ephemeral: true,
 					});
 			}
+
 			cmd.run({ client: this.client, interaction }).catch((err: any) => {
 				if (err instanceof CustomError)
 					return interaction.reply({
@@ -93,6 +95,8 @@ export default class IntCreate extends Event {
 					});
 				else this.client.logger.warn(`[${this.name}] -> ${err.stack}`);
 			});
+
+			this.cooldown.addCooldown(interaction, cmd);
 		}
 	}
 }

@@ -10,7 +10,7 @@ export default class LanguageManager {
 
 	public async format_message(interaction: ChatInputCommandInteraction<'cached'>, key: string, options: { words: LangOptionsInterface } = { words: {} }): Promise<string> {
 		const lang_db = await lang_model.findOne({serverId: interaction.guildId});
-		const lang = lang_db.lang ?? this.languages;
+		const lang = lang_db?.lang ?? this.languages;
         const key_split = key.split('.');
 		const json = await import(`../locales/${lang}.json`);
 		const value = this.get_value(key_split, json);

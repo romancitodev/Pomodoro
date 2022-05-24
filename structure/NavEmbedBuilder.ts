@@ -26,7 +26,7 @@ export class NavEmbedBuilder {
         const mid_button = new ButtonBuilder()
             .setLabel('🗑')
             .setCustomId('mid')
-            .setStyle(ButtonStyle.Primary)
+            .setStyle(ButtonStyle.Danger)
             
         const buttons = [l_button, mid_button, r_button];
         const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttons);

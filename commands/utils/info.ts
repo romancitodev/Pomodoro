@@ -70,7 +70,7 @@ export default class Help extends Command {
 							];
 
 						embed.setTitle(
-							await client.lang.format_message('info.category.title',{ words: { emoji, category, commands: commands.length }})
+							await client.lang.format_message(interaction,'info.category.title',{ words: { emoji, category, commands: commands.length }})
 						);
 						embed.setDescription(
 							`${commands
@@ -102,42 +102,42 @@ export default class Help extends Command {
 
 						if (!cmd)
 							return client.handleError({
-								error: await client.lang.format_message('info.command.error01.error'),
+								error: await client.lang.format_message(interaction,'info.command.error01.error'),
 								description:
-									await client.lang.format_message('info.command.error01.description'),
+									await client.lang.format_message(interaction,'info.command.error01.description'),
 							});
 
 						const cmdData = cmd.options;
 
-						embed.setTitle(await client.lang.format_message('info.command.embed.title'));
+						embed.setTitle(await client.lang.format_message(interaction,'info.command.embed.title'));
 						embed.addFields(
 							[{
-								name: await client.lang.format_message('info.command.embed.fields.command_name'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.command_name'),
 								value: `\`${cmdData.data.name}\``,
 								inline: true,
 							},
 							{
-								name: await client.lang.format_message('info.command.embed.fields.description'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.description'),
 								value: `\`${cmdData.data.description}\``,
 								inline: true,
 							},
 							{
-								name: await client.lang.format_message('info.command.embed.fields.category'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.category'),
 								value: `\`${cmdData.category}\``,
 								inline: true,
 							},
 							{
-								name: await client.lang.format_message('info.command.embed.fields.cooldown'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.cooldown'),
 								value: `\`${cmdData.cooldown}\``,
 								inline: true,
 							},
 							{
-								name: await client.lang.format_message('info.command.embed.fields.userperms'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.userperms'),
 								value: `\`${cmdData.userPerms.join(", ")}\``,
 								inline: true,
 							},
 							{
-								name: await client.lang.format_message('info.command.embed.fields.botperms'),
+								name: await client.lang.format_message(interaction,'info.command.embed.fields.botperms'),
 								value: `\`${cmdData.clientPerms.join(", ")}\``,
 								inline: true,
 							}]

@@ -20,7 +20,7 @@ export default class Ping extends Command {
 				.setDescription("Pong!"),
 			run: async ({ client, interaction }) => {
 				const embed = new EmbedBuilder()
-					.setTitle(await client.lang.format_message('ping.embed.before'))
+					.setTitle(await client.lang.format_message(interaction,'ping.embed.before'))
 					.setColor(client.colors.Invisible);
 				const reply = await interaction.reply({
 					embeds: [embed],
@@ -29,10 +29,10 @@ export default class Ping extends Command {
 
 				const ping = reply.createdTimestamp - Date.now();
 
-				embed.setTitle(await client.lang.format_message('ping.embed.title'));
+				embed.setTitle(await client.lang.format_message(interaction,'ping.embed.title'));
 				embed.setColor(client.colors.Success);
 				embed.setDescription(
-					await client.lang.format_message("ping.embed.description", {
+					await client.lang.format_message(interaction,"ping.embed.description", {
 						words: {	
 							emojiping: emoji(ping),
 							emojitime: emoji(client.ws.ping),

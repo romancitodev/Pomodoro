@@ -1,5 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../structure/Command";
+import { NavEmbedBuilder } from "../../structure/NavEmbedBuilder";
 
 //const categoryArray = ["Utils", "Fun", "Configuration"];
 
@@ -13,12 +14,14 @@ export default class help extends Command {
 			data: new SlashCommandBuilder()
 				.setName("help")
 				.setDescription("List all commands."),
-			async run({ client, interaction }) {
-				const embed = new EmbedBuilder();
-                embed.setColor(client.colors.Invisible);
-                embed.setTitle("commands");
-                embed.setDescription("List of all commands.");
-				await interaction.reply({ embeds: [embed] });
+			async run({ interaction }) {
+				const embeds: EmbedBuilder[] = [];
+				for (let i = 0; i <= 5; i++) {
+					embeds.push(new EmbedBuilder().setTitle(`Category ${i}`).setDescription("Description"));
+				}
+				const nav = new NavEmbedBuilder(embeds);
+				
+				nav.start(interaction);
 			},
 		});
 	}

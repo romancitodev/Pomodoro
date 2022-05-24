@@ -31,7 +31,7 @@ export class NavEmbedBuilder {
         const buttons = [l_button, mid_button, r_button];
         const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttons);
 
-        interaction.reply({ embeds: [this.embeds[0]],components: [row] });
+        interaction.reply({ embeds: [this.embeds[0].setFooter({ text: `Page ${this.counter} of ${this.embeds.length - 1}`})],components: [row] });
 
         collector?.on('collect', async (i) => {
             i.deferUpdate()
@@ -53,7 +53,7 @@ export class NavEmbedBuilder {
             const buttons = [l_button, mid_button, r_button];
             const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttons);
 
-            interaction.editReply({ embeds: [this.embeds[this.counter]], components: [row] });
+            interaction.editReply({ embeds: [this.embeds[this.counter].setFooter({ text: `Page ${this.counter} of ${this.embeds.length - 1}`})], components: [row] });
         })
 
         collector?.on('end', async (_collected, reason) => {

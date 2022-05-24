@@ -1,33 +1,16 @@
 import { LangOptionsInterface } from "../types/LanguageInterface";
-import Logger from "./ConsoleColors";
+import lang_model from "../models/langs";
+import { ChatInputCommandInteraction } from "discord.js";
 
 export default class LanguageManager {
-	public languages: string[] = [];
-
-	private logger = new Logger();
-	constructor({ lang = false }: { lang: string | boolean }) {
-		lang ? this.languages.push(lang as string) : (this.languages = []);
+	private languages: string = "";
+	constructor({ lang }: { lang: string }) {
+		this.languages = lang
 	}
 
-	public async setLanguage(lang: Array<string>): Promise<void> {
-		for (const l of lang) {
-			try {
-				await import(`../locales/${l}.json`);
-				if (!this.languages.includes(l)) {
-					this.languages.push(l);
-				} else {
-					this.logger.warn(
-						`Language ${l} already exists in the list.`
-					);
-				}
-			} catch (e) {
-				this.logger.warn(`Language ${l} not found!`);
-			}
-		}
-	}
-
-	public async format_message(key: string, options: { words: LangOptionsInterface } = { words: {}}): Promise<string> {
-        const lang = this.languages[0];
+	public async format_message(interaction: ChatInputCommandInteraction<'cached'>, key: string, options: { words: LangOptionsInterface } = { words: {} }): Promise<string> {
+		const lang_db = await lang_model.findOne({serverId: interaction.guildId});
+		const lang = lang_db.lang ?? this.languages;
         const key_split = key.split('.');
 		const json = await import(`../locales/${lang}.json`);
 		const value = this.get_value(key_split, json);

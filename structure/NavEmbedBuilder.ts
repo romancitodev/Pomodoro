@@ -13,18 +13,18 @@ export class NavEmbedBuilder {
         
         const collector = interaction.channel?.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000, filter: (i) => i.user.id === interaction.user.id });
         const l_button = new ButtonBuilder()
-            .setLabel('⬅')
+            .setLabel('◀️​')
             .setCustomId('left')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true)
         
         const r_button = new ButtonBuilder()
-            .setLabel('➡')
+            .setLabel('​▶️')
             .setCustomId('right')
             .setStyle(ButtonStyle.Primary)
         
         const mid_button = new ButtonBuilder()
-            .setLabel('🗑')
+            .setLabel('🗑️')
             .setCustomId('mid')
             .setStyle(ButtonStyle.Danger)
             

@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "npx ts-node index.ts",
-		"push" : " git push \"https://github.com/ChirujanoCodding/Pomodoro\" --force"
+		"push" : " git push \"https://github.com/ChirujanoCodding/Pomodoro\" --force",
+		"pull" : "git pull \"https://github.com/ChirujanoCodding/Pomodoro\""
 	},
 	"keywords": [],
 	"author": "ElShyrux",

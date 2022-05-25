@@ -59,8 +59,8 @@ export class Pomodoro extends Client {
 	}
 
 	public async init() {
-		this.loadCommands();
-		this.loadEvents();
+		await this.loadCommands();
+		await this.loadEvents();
 		this.database.init().then(() => {
 			this.logger.log("Database initialized!");
 		}).catch((_err:any) => { this.logger.warn("Database not initialized!") });

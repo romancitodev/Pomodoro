@@ -16,11 +16,10 @@ export default class help extends Command {
 				.setDescription("List all commands."),
 			async run({ interaction }) {
 				const embeds: EmbedBuilder[] = [];
-				for (let i = 0; i <= 5; i++) {
+				for (let i = 1; i <= 5; i++) {
 					embeds.push(new EmbedBuilder().setTitle(`Category ${i}`).setDescription("Description"));
 				}
 				const nav = new NavEmbedBuilder(embeds);
-				
 				nav.start(interaction);
 			},
 		});

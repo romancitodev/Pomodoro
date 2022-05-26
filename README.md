@@ -49,16 +49,28 @@ events
 Inside the configuration file, write this
 
 ```typescript
-export Bot_Token = "Your bot token";
-export configuration = {
-	serverId: "your server id", 
-	testing: true | false,
+import { Config } from "../types/ConfigurationType";
+
+export const Bot_Token: string =
+	"Your token bot";
+
+export const configuration: Config = {
+	serverId: "your server id",
+	testing: true | false , // false push all commands for all servers where the bot is.
 	mongoData: {
-		username: "Your mongo database user",
-		passwourd: "Your mongo database password"
-		},
-	devs: ["Your ID"]
-	}
+		username: "Your mongo username",
+		password: "Your mongo password",
+	},
+	devs: ["Your id"],
+};
+
+export enum Colors {
+	Error = "#eb4034",
+	Success = "#6ad966",
+	Warning = "#e69627",
+	Default = "#4350fa",
+	Invisible = "#2f3136",
+}
 ```
 
 Copy and paste this in your terminal

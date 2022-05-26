@@ -1,6 +1,6 @@
 import { LangOptionsInterface } from "../types/LanguageInterface";
 import lang_model from "../models/langs";
-import { ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, Interaction } from "discord.js";
 
 export default class LanguageManager {
 	private languages: string = "";
@@ -8,7 +8,7 @@ export default class LanguageManager {
 		this.languages = lang
 	}
 
-	public async format_message(interaction: ChatInputCommandInteraction<'cached'>, key: string, options: { words: LangOptionsInterface } = { words: {} }): Promise<string> {
+	public async format_message(interaction: ChatInputCommandInteraction<'cached'> | Interaction<"cached">, key: string, options: { words: LangOptionsInterface } = { words: {} }): Promise<string> {
 		const lang_db = await lang_model.findOne({serverId: interaction.guildId});
 		const lang = lang_db?.lang ?? this.languages;
         const key_split = key.split('.');

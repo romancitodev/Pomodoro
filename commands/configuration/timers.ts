@@ -1,12 +1,6 @@
 import {
 	SlashCommandBuilder,
 	EmbedBuilder,
-	// ButtonBuilder,
-	// ButtonStyle,
-	// Interaction,
-	// ActionRowBuilder,
-	// MessageActionRowComponentBuilder,
-	// ComponentType,
 	APIEmbedField,
 } from "discord.js";
 import { Command } from "../../structure/Command";

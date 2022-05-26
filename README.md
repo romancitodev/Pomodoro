@@ -3,7 +3,7 @@
   <img src="http://store-images.s-microsoft.com/image/apps.38737.14049653041316721.afcc08a1-81bb-4df4-aa24-cb7e0fa40a0d.36c559cf-d333-4e78-89a5-e9479407cb22" />
 </p>
 <a href ="#">
-<img src="https://img.shields.io/badge/Discord-ElShyrux-7289DA?style=for-the-badge&logo=Discord" alt="Support" href = "#">
+<img src="https://img.shields.io/badge/Discord-ElShyrux-7289DA?style=for-the-badge&logo=Discord" alt="Support" href = "https://discord.com/users/401845716991082496">
 </a>
 <a href = "https://www.typescriptlang.org/">
 <img src="https://img.shields.io/badge/Made%20with-TypeScript-blue?style=for-the-badge&logo=Typescript" alt= "Lang">

@@ -19,14 +19,14 @@
 2. [How does it work](#works)
 3. [How to install](#install)
 
-### Introduction {#intro}
+### Introduction
 Pomodoro Bot is a project with the purpose of organize your time and focus better on your tasks.
 
-###  How does it work? {#works}
+###  How does it work?
 Pomodoro Bot implements a [metodology](https://en.wikipedia.org/wiki/Pomodoro_Technique) comprobed by scientific studies.
 In other words, the bot based on cycles of 25 minutes of focus and 5 minutes of relax.
 
-### Installing Pomodoro {#install}
+### Installing Pomodoro
 To create your own bot based in Pomodoro, first of all, need to clone the project.
 
 ```sh

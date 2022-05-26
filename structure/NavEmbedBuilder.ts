@@ -1,5 +1,7 @@
 import { ButtonStyle, ChatInputCommandInteraction, ComponentType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, MessageActionRowComponentBuilder} from "discord.js";
+import LanguageManager from "./LanguageManager";
 
+const lang = new LanguageManager({ lang: 'es' });
 export class NavEmbedBuilder {
     private embeds: EmbedBuilder[] = [];
     private counter: number = 0;
@@ -8,7 +10,6 @@ export class NavEmbedBuilder {
         this.embeds = embeds;
         
     }
-
     public async start(interaction: ChatInputCommandInteraction<'cached'>) {
         const l_button = new ButtonBuilder()
         .setLabel('◀️​')
@@ -29,7 +30,9 @@ export class NavEmbedBuilder {
         const buttons = [l_button, mid_button, r_button];
         const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttons);
         const rep = interaction.reply({
-            embeds: [this.embeds[0].setFooter({ text: `Page ${this.counter + 1} of ${this.embeds.length}` })], components: [row], fetchReply: true
+            embeds: [this.embeds[0].setFooter({
+                text: await lang.format_message(interaction, 'nav.footer', { words: { current: this.counter + 1, total: this.embeds.length } })
+            })], components: [row], fetchReply: true
         });
         const collector = (await rep).createMessageComponentCollector({
             componentType: ComponentType.Button, time: 60000, filter: (i) => i.user.id === interaction.user.id
@@ -54,12 +57,14 @@ export class NavEmbedBuilder {
             const buttons = [l_button, mid_button, r_button];
             const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttons);
             if (interaction.id === interaction.id)
-            (await rep).edit({ embeds: [this.embeds[this.counter].setFooter({ text: `Page ${this.counter + 1} of ${this.embeds.length}` })], components: [row] })
+            (await rep).edit({ embeds: [this.embeds[this.counter].setFooter({
+                text: await lang.format_message(interaction, 'nav.footer', { words: { current: this.counter + 1, total: this.embeds.length } })
+            })], components: [row] })
         })
 
         collector?.on('end', async (_collected, reason) => {
             if (reason == 'pressed mid button') { interaction.deleteReply(); return; }
-            if (reason != 'pressed mid button') interaction.editReply({content: "Navigation ended", components: []});
+            if (reason != 'pressed mid button') interaction.editReply({ content: await lang.format_message(interaction, 'nav.collector'), components: []});
         })
     }
 }

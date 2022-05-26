@@ -38,5 +38,14 @@
                 }
 			}
 		}
+	},
+	"cooldown" : {
+		"check" : {
+			"description" : "Oh! you can use this command in {time}."
+		}
+	},
+	"nav": {
+		"footer": "Page {current} of {total}",
+		"collector" : "Buttons expired"
 	}
 }

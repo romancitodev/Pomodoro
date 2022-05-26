@@ -38,5 +38,14 @@
                 }
 			}
 		}
-	}
+	},
+	"cooldown" : {
+		"check" : {
+			"description" : "Oops, podes usar el comando en {time}."
+		}
+	},
+    "nav": {
+        "footer": "página {current} de {total}",
+        "collector": "Botones expirados"
+    }
 }

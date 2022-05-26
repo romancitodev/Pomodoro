@@ -1,16 +1,17 @@
 import {
 	SlashCommandBuilder,
 	EmbedBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	Interaction,
-	ActionRowBuilder,
-	MessageActionRowComponentBuilder,
-	ComponentType,
+	// ButtonBuilder,
+	// ButtonStyle,
+	// Interaction,
+	// ActionRowBuilder,
+	// MessageActionRowComponentBuilder,
+	// ComponentType,
 	APIEmbedField,
 } from "discord.js";
 import { Command } from "../../structure/Command";
 import { v4 as genId } from "uuid";
+import { NavEmbedBuilder } from "../../structure/NavEmbedBuilder";
 export default class Timers extends Command {
 	constructor() {
 		super({
@@ -204,48 +205,20 @@ export default class Timers extends Command {
 						const task = await tasksDB.findOne({
 							id: interaction.user.id,
 						});
-						const button_left = new ButtonBuilder()
-							.setCustomId("left")
-							.setEmoji("⬅️")
-							.setStyle(ButtonStyle.Secondary);
-						const button_right = new ButtonBuilder()
-							.setCustomId("right")
-							.setEmoji("➡️")
-							.setStyle(ButtonStyle.Secondary);
-						const row =
-							new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-								[button_left,
-								button_right]
-							);
+
+						const embeds:EmbedBuilder[] = [];
+
 						if (!task)
 							return client.handleError({
 								error: "Task not found",
 								description:
 									"You don't add any task to list before.",
 							});
-
-						const embed = new EmbedBuilder()
-							.setTitle("📝 | List of tasks")
-							.setColor(client.colors.Default);
-
+	
 						const totalCiclesTime = task.task.reduce(
 							(acc: any, cur: any) => acc + cur.cicles * 25,
 							0
 						);
-						if (task.task.length === 0) {
-							embed.setDescription("No tasks found.");
-						} else {
-							embed.setDescription(
-								`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
-							);
-						}
-						if (task.task.length <= 3) {
-							button_left.setDisabled(true);
-							button_right.setDisabled(true);
-						} else {
-							button_left.setDisabled(false);
-							button_right.setDisabled(false);
-						}
 						const allTasks: Array<APIEmbedField> = task.task.map(
 							(task: any, i: number) => {
 								return {
@@ -257,115 +230,22 @@ export default class Timers extends Command {
 								};
 							}
 						);
-						const temp = allTasks.slice(0, 3);
-						embed.addFields([...temp]);
 
-						let pages = Math.ceil(allTasks.length / 3) || 1;
-						let currentPage = 0;
-						if (currentPage == 0) button_left.setDisabled(true);
-						let currentEmbed;
-
-						embed.setFooter({
-							text: `Page ${currentPage + 1} of ${pages}`,
-						});
-
-						const filter = (i: Interaction) =>
-							i.user.id === interaction.user.id;
-
-						if (pages > 1)
-							interaction.reply({
-								embeds: [embed],
-								components: [row],
-								fetchReply: true,
-							});
-						else
-							return interaction.reply({
-								embeds: [embed],
-							});
-
-						const collector =
-							interaction.channel?.createMessageComponentCollector(
-								{
-									filter,
-									time: 60000,
-									componentType: ComponentType.Button,
-								}
-							);
-
-						collector?.on("collect", async (i) => {
-							const updatedEmbed = new EmbedBuilder()
-								.setTitle("📝 | List of tasks")
-								.setColor(client.colors.Default);
-							i.deferUpdate();
-							if (i.customId == "left") {
-								if (currentPage > 0) {
-									currentPage--;
-									currentEmbed = allTasks.slice(
-										currentPage * 3,
-										currentPage * 3 + 3
-									);
-									updatedEmbed.setDescription(
-										`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
-									);
-									updatedEmbed.addFields([...currentEmbed]);
-									updatedEmbed.setFooter({
-										text: `Page ${
-											currentPage + 1
-										} of ${pages}`,
-									});
-									if (currentPage === 0) {
-										button_left.setDisabled(true);
-									}
-									button_right.setDisabled(false);
-									await interaction.editReply({
-										embeds: [updatedEmbed],
-										components: [
-											new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-												[button_left,
-												button_right]
-											),
-										],
-									});
-								}
-							} else if (i.customId == "right") {
-								if (currentPage < pages) {
-									currentPage++;
-									currentEmbed = allTasks.slice(
-										currentPage * 3,
-										currentPage * 3 + 3
-									);
-									updatedEmbed.setDescription(
-										`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
-									);
-									updatedEmbed.addFields([...currentEmbed]);
-									updatedEmbed.setFooter({
-										text: `Page ${
-											currentPage + 1
-										} of ${pages}`,
-									});
-									if (currentPage === pages - 1) {
-										button_right.setDisabled(true);
-									}
-									button_left.setDisabled(false);
-									await interaction.editReply({
-										embeds: [updatedEmbed],
-										components: [
-											new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-												[button_left,
-												button_right]
-											),
-										],
-									});
-								}
-							}
-						});
-
-						collector?.on("end", async (_collected) => {
-							interaction.editReply({
-								components: [],
-								content: "se acabó el tiempo",
-							});
-						});
+						for (let i = 0; i < allTasks.length; i += 3) {
+							embeds.push(new EmbedBuilder().setTitle("📝 | List of tasks").setDescription(`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
+							)
+								.setColor(client.colors.Default)
+								.addFields([...allTasks.slice(i, i + 3)]));
+						}
+						if (allTasks.length <= 3) {
+							if (allTasks.length === 0) embeds.push
+								(new EmbedBuilder().setTitle("📝 | List of tasks").setDescription("No tasks found.").setColor(client.colors.Default));
+							return interaction.reply({ embeds: [embeds[0]] });
+						} else {
+							const nav = new NavEmbedBuilder(embeds)
+							nav.start(interaction);
+						}
+						
 					},
 
 					start: async () => {

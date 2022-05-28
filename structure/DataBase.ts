@@ -1,4 +1,4 @@
-import mongoose, { Model } from "mongoose";
+import mongoose from "mongoose";
 
 export default class DataBase {
 	username: string;
@@ -13,10 +13,5 @@ export default class DataBase {
 		await mongoose.connect(
 			`mongodb+srv://${this.username}:${this.password}@cluster0.ekstv.mongodb.net/?retryWrites=true&w=majority`
 		);
-	}
-
-	public async import(path: string): Promise<Model<any, {},{},{}>>  {
-		const file: any = await import(path);
-		return file['default'];
 	}
 }

@@ -47,5 +47,15 @@
 	"nav": {
 		"footer": "Page {current} of {total}",
 		"collector" : "Buttons expired"
+	},
+	"set-lang": {
+		"embed": {
+			"title": "✅ Language seted!",
+			"description": "The language has been set to `{lang}`."
+		},
+		"error": {
+			"error": "Language Error",
+			"description": "The language is already set to this language."
+		}
 	}
 }

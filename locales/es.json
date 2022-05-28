@@ -47,5 +47,15 @@
     "nav": {
         "footer": "página {current} de {total}",
         "collector": "Botones expirados"
-    }
+    },
+	"set-lang": {
+		"embed": {
+			"title": "✅ Lenguaje aplicado correctamente.",
+			"description": "El lenguaje fue actualizado correctamente a `{lang}`."
+		},
+        "error": {
+            "error" : "Error al cambiar el lenguaje.",
+            "description": "El lenguaje es el mismo."
+        }
+	}
 }

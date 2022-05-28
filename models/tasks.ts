@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const m = model(
+const m = model<Tasks>(
 	"Tasks",
 	new Schema({
 		server: { type: String, required: true },
@@ -21,5 +21,11 @@ const m = model(
 		],
 	})
 );
+
+interface Tasks { 
+	server: string;
+	user: string;
+	task: [{name:string, cicles:number, id:string, status:{started?:boolean, startedAt?:Date}}];
+}
 
 export default m;

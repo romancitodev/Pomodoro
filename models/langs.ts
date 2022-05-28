@@ -1,11 +1,17 @@
 import { Schema, model } from "mongoose";
 
-const m = model(
+const m = model<Langs>(
 	"Langs",
 	new Schema({
-		server: { type: String, required: true },
+		serverId: { type: String, required: true },
 		lang: { type: String, required: true },
 	})
 );
 
+interface Langs {
+	serverId: string;
+	lang: string;
+}
+
 export default m;
+

@@ -1,11 +1,10 @@
 import { Schema, model } from "mongoose";
 
-const m = model(
+const m = model<Cooldowns>(
 	"cooldowns",
 	new Schema({
 		serverId: { type: String, required: true },
-		list: {
-            command: {
+            command: [{
                 name: { type: String, required: true },
                 data : [
                     {
@@ -13,9 +12,19 @@ const m = model(
                         userId: { type: String, required: true },
                     },
                 ]
-            },
-		},
+            }],
 	})
 );
+
+interface Cooldowns {
+    serverId: string;
+    command: [{
+        name: string;
+        data: [{
+            timeLeft: Date;
+            userId: string;
+        }]
+    }]
+}
 
 export default m;

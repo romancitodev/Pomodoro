@@ -15,11 +15,6 @@ export default class help extends Command {
 				.setDescription("List all commands."),
 			async run({ client, interaction }) {
 
-				// vamos a hacer un dropdown menu
-				// para que el usuario pueda elegir
-
-				// vamos a hacer un array de embeds que tengan guardados los comandos
-
 				const embeds: EmbedBuilder[] = [];
 				
 				embeds.push(new EmbedBuilder().setTitle('Help command').setDescription(`${categoryArray.map(category => `> ✨ \`${category}\``).join('\n')}`).setColor(client.colors.Default));
@@ -69,7 +64,7 @@ export default class help extends Command {
 
 				collector.on('end', async (_collected, reason) => {
 					if (reason === 'time') {
-						await interaction.editReply({ content: 'Menu Expired' });
+						await interaction.editReply({ content: 'Menu Expired', components: [] });
 					}
 				})
 			},

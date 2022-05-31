@@ -11,7 +11,6 @@ export default class Help extends Command {
 			cooldown: "5s",
 			userPerms: ["SendMessages", "UseApplicationCommands"],
 			clientPerms: ["SendMessages"],
-			conditions: ["inDevelopment"],
 			data: new SlashCommandBuilder()
 				.setName("info")
 				.setDescription("information about a command or category ✨.")

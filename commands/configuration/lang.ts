@@ -9,7 +9,7 @@ export default class LangSeter extends Command {
         super({
             category: 'Configuration',
             cooldown: '5s',
-            userPerms: ['SendMessages', 'UseApplicationCommands'],
+            userPerms: ['SendMessages', 'UseApplicationCommands','Administrator','ManageGuild'],
             clientPerms: ['SendMessages'],
             data: new SlashCommandBuilder()
                 .setName('set-lang')

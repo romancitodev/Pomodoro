@@ -14,7 +14,6 @@ export default class Ping extends Command {
 			cooldown: "5s",
 			userPerms: ["SendMessages", "UseApplicationCommands"],
 			clientPerms: ["SendMessages"],
-			conditions: ["onlyDev"],
 			data: new SlashCommandBuilder()
 				.setName("ping")
 				.setDescription("Pong!"),

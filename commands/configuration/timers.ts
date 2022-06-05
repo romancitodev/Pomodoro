@@ -1,11 +1,9 @@
-import {
-	SlashCommandBuilder,
-	EmbedBuilder,
-	APIEmbedField,
-} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, APIEmbedField } from "discord.js";
 import { Command } from "../../structure/Command";
 import { v4 as genId } from "uuid";
 import { NavEmbedBuilder } from "../../structure/NavEmbedBuilder";
+import MongoTasks from "../../models/tasks";
+
 export default class Timers extends Command {
 	constructor() {
 		super({
@@ -16,7 +14,7 @@ export default class Timers extends Command {
 			data: new SlashCommandBuilder()
 				.setName("tasks")
 				.setDescription("task options.")
-
+				
 				.addSubcommand((sub) =>
 					sub
 						.setName("add")
@@ -31,9 +29,7 @@ export default class Timers extends Command {
 							opc
 								.setName("cicles")
 								.setRequired(false)
-								.setDescription(
-									"The number of cicles the task will repeat."
-								)
+								.setDescription("The number of cicles the task will repeat.")
 						)
 				)
 				.addSubcommand((sub) =>
@@ -56,30 +52,27 @@ export default class Timers extends Command {
 
 			async run({ client, interaction }) {
 				const subcmd = interaction.options.getSubcommand(true);
-				const tasksDB = await client.database.import(
-					"../models/tasks.ts"
-				);
+				const tasksDB = MongoTasks.findOne({
+					serverId: interaction.guild.id,
+				});
 
 				const functions = {
 					add: async () => {
-						const task_name = interaction.options.getString("name");
-						const cicles =
-							interaction.options.getNumber("cicles") || 1;
+						const task_name = interaction.options.getString("name", true);
+						const cicles = interaction.options.getNumber("cicles") || 1;
 
 						if (cicles < 0 || cicles > 10)
 							return client.handleError({
 								error: "Invalid cicles",
-								description:
-									"The cicles must be between 0 and 10.",
+								description: "The cicles must be between 0 and 10.",
 							});
 
 						const id = genId().substring(0, 8);
-						const isAlreadyExists = await tasksDB.findOne({
-							server: interaction.guildId,
+						const hasTask = await tasksDB.findOne({
 							user: interaction.user.id,
 						});
-						if (!isAlreadyExists) {
-							const task = new tasksDB({
+						if (!hasTask) {
+							const task = new MongoTasks({
 								server: interaction.guildId,
 								user: interaction.user.id,
 								task: [
@@ -96,48 +89,42 @@ export default class Timers extends Command {
 							});
 							await task.save();
 						} else {
-							const task = await tasksDB.findOne({
-								server: interaction.guildId,
-								user: interaction.user.id,
-							});
-							task.task.push({
+							hasTask?.task.push({
 								name: task_name,
 								cicles,
-								id,		
+								id,
 								status: { started: false },
 							});
-							await task.save();
+							await hasTask?.save();
 						}
 						const break_time = cicles * 5;
-						const task = await tasksDB.findOne({
-							server: interaction.guildId,
-							user: interaction.user.id,
-						});
-						const isStarted = task.task[0].status.startedAt;
+
+						const isStarted = hasTask?.task[0].status.startedAt;
 
 						const embed = new EmbedBuilder()
 							.setTitle(`📝 | Adding task: \`${task_name}\``)
 							.setColor(client.colors.Invisible)
-							.setDescription(
-								`> \`${cicles}\` cicles of \`25\` minutes each. -> \`${
-									cicles * 25
-								}\` minutes in total.`
-							)
-							.addFields([{
-								
-								name: "`🌐` | ID:",
-								value: `> \`${id}\``,
-								inline: true,
-							}])
-							.addFields([{
-								name: "`⌛` | Break time:",
-								value: `> in \`${
-									!isStarted
-										? `${break_time / cicles}`
-										: `${isStarted - Date.now()}`
-								}\` minutes`,
-								inline: true,
-							}]);
+							.setDescription(`> \`${cicles}\` cicles of \`25\` minutes each. -> \`${cicles * 25}\` minutes in total.`)
+							.addFields([
+								{
+									name: "`🌐` | ID:",
+									value: `> \`${id}\``,
+									inline: true,
+								},
+							])
+							.addFields([
+								{
+									name: "`⌛` | Break time:",
+									value: `> in \`${
+										!isStarted
+											? `${break_time / cicles}`
+											: `${new Date(
+													isStarted.getTime() - Date.now()
+											  ).getMinutes()}`
+									}\` minutes`,
+									inline: true,
+								},
+							]);
 
 						return interaction.reply({ embeds: [embed] });
 					},
@@ -154,9 +141,7 @@ export default class Timers extends Command {
 									"The task you are trying to remove does not exist.",
 							});
 
-						const isTask = task.task.find(
-							(task: any) => task.id === id
-						);
+						const isTask = task.task.find((task: any) => task.id === id);
 						if (!isTask)
 							return client.handleError({
 								error: "Task not found",
@@ -184,9 +169,7 @@ export default class Timers extends Command {
 							.setTitle(`🗑 | Removed task: \`${isTask.name}\``)
 							.setColor(client.colors.Invisible)
 							.setDescription(
-								`> \`${
-									isTask.cicles
-								}\` cicles of \`25\` minutes each. -> \`${
+								`> \`${isTask.cicles}\` cicles of \`25\` minutes each. -> \`${
 									isTask.cicles * 25
 								}\` minutes in total.`
 							);
@@ -200,15 +183,14 @@ export default class Timers extends Command {
 							id: interaction.user.id,
 						});
 
-						const embeds:EmbedBuilder[] = [];
+						const embeds: EmbedBuilder[] = [];
 
 						if (!task)
 							return client.handleError({
 								error: "Task not found",
-								description:
-									"You don't add any task to list before.",
+								description: "You don't add any task to list before.",
 							});
-	
+
 						const totalCiclesTime = task.task.reduce(
 							(acc: any, cur: any) => acc + cur.cicles * 25,
 							0
@@ -216,9 +198,7 @@ export default class Timers extends Command {
 						const allTasks: Array<APIEmbedField> = task.task.map(
 							(task: any, i: number) => {
 								return {
-									name: `${i + 1}. \`📚\` Name: \`${
-										task.name
-									}\``,
+									name: `${i + 1}. \`📚\` Name: \`${task.name}\``,
 									value: `> \`⌛\` \`${task.cicles}\` cicles of \`25\` minutes each.\n> \`🌐\` | ID: \`${task.id}\``,
 									inline: true,
 								};
@@ -226,20 +206,29 @@ export default class Timers extends Command {
 						);
 
 						for (let i = 0; i < allTasks.length; i += 3) {
-							embeds.push(new EmbedBuilder().setTitle("📝 | List of tasks").setDescription(`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
-							)
-								.setColor(client.colors.Default)
-								.addFields([...allTasks.slice(i, i + 3)]));
+							embeds.push(
+								new EmbedBuilder()
+									.setTitle("📝 | List of tasks")
+									.setDescription(
+										`\`${task.task.length}\` tasks found. (\`${totalCiclesTime}\` minutes in total)`
+									)
+									.setColor(client.colors.Default)
+									.addFields([...allTasks.slice(i, i + 3)])
+							);
 						}
 						if (allTasks.length <= 3) {
-							if (allTasks.length === 0) embeds.push
-								(new EmbedBuilder().setTitle("📝 | List of tasks").setDescription("No tasks found.").setColor(client.colors.Default));
+							if (allTasks.length === 0)
+								embeds.push(
+									new EmbedBuilder()
+										.setTitle("📝 | List of tasks")
+										.setDescription("No tasks found.")
+										.setColor(client.colors.Default)
+								);
 							return interaction.reply({ embeds: [embeds[0]] });
 						} else {
-							const nav = new NavEmbedBuilder(embeds)
+							const nav = new NavEmbedBuilder(embeds);
 							nav.start(interaction);
 						}
-						
 					},
 
 					start: async () => {
@@ -247,12 +236,8 @@ export default class Timers extends Command {
 							server: interaction.guildId,
 							user: interaction.user.id,
 						});
-						if (!tasks)
-							return client.handleError({
-								error: "no tasks",
-								description: "You doesn't have tasks already",
-							});
-						if (tasks.task.length == 0)
+
+						if (!tasks || tasks?.task.length < 1)
 							return client.handleError({
 								error: "no tasks",
 								description: "You doesn't have tasks already",
@@ -262,29 +247,79 @@ export default class Timers extends Command {
 								error: "started",
 								description: "You already started the task",
 							});
-						const totalTime = tasks.task.reduce(
-							(acc: any, cur: any) => acc + cur.cicles * 25,
-							0
-						);
 						const embed = new EmbedBuilder()
-							.setTitle(
-								`\\💻 | Starting task #1 [\`${tasks.task[0].name}\`]`
-							)
+							.setTitle(`\\💻 | Starting task [\`${tasks.task[0].name}\`]`)
 							.setDescription(
-								`\`${
-									tasks.task.length - 1
-								}\` tasks remaining (${
-									totalTime - 25
-								}) minutes in total.`
+								`\`${tasks.task[0].cicles}\` cicles remaining (\`${
+									tasks.task[0].cicles * 25
+								}\`) minutes in total.`
 							)
 							.setColor(client.colors.Default);
 
 						tasks.task[0].status.started = true;
-						tasks.task[0].status.startedAt = Date.now();
+						tasks.task[0].status.startedAt = new Date();
 
 						await tasks.save();
 
-						return interaction.reply({ embeds: [embed] });
+						interaction.reply({ embeds: [embed] });
+
+						const work = 2;
+						let rem_work = work - 1;
+						const break_time = 1;
+						const cicles = tasks.task[0].cicles;
+						let completed_cicles = 0;
+						let secs = 60;
+						const TaskEmbed = new EmbedBuilder()
+							.setTitle(`\\💻 | Task [\`${tasks.task[0].name}\`]`)
+							.setDescription(`
+							\`💪\` | Work time! (${cicles - completed_cicles}) cicles remaining - ${completed_cicles * 25} minutes in total.`
+							).setColor(client.colors.Default)
+					
+						const get_remaining_time = async () => {
+							secs--;
+							if (secs === 0) {
+								secs = 60;
+								rem_work--;
+								if (rem_work <= -1) {
+									if (completed_cicles % 2 === 0) {
+										rem_work = break_time;
+										completed_cicles++
+										TaskEmbed.setDescription('\`💤\` | Break time!').setColor(client.colors.Warning);
+
+									} else {
+										rem_work = work - 1;
+										completed_cicles++
+										TaskEmbed.setDescription(`
+										\`💪\` | Work time! (${cicles - completed_cicles}) cicles remaining - ${cicles - completed_cicles * 25} minutes in total.`
+										).setColor(client.colors.Default)
+									}
+								}
+							}
+
+							
+							
+							if (completed_cicles > cicles) {
+								const embed = new EmbedBuilder()
+								.setTitle(`\\🎉 | Task [\`${tasks.task[0].name}\`] Completed!`)
+								.setColor(client.colors.Success);
+								
+								tasks.task.shift();
+								
+								await tasks.save();
+								
+								interaction.editReply({ embeds: [embed] });
+								clearInterval(timer);
+								
+							} else {
+								interaction.editReply({ embeds: [TaskEmbed] })
+							}
+
+						}
+
+						const timer = setInterval(get_remaining_time, 1000);
+
+						
+
 					},
 					stop: () => {},
 					current: () => {},

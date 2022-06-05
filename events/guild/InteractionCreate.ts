@@ -96,7 +96,8 @@ export default class IntCreate extends Event {
 				else this.client.logger.warn(`[${this.name}] -> ${err.stack}`);
 			});
 
-			this.cooldown.addCooldown(interaction, cmd);
+			// disabled temporary cooldown because generate a lot of errors
+			//this.cooldown.addCooldown(interaction, cmd);
 		}
 	}
 }

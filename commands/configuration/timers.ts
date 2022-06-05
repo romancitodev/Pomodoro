@@ -249,11 +249,6 @@ export default class Timers extends Command {
 							});
 						const embed = new EmbedBuilder()
 							.setTitle(`\\💻 | Starting task [\`${tasks.task[0].name}\`]`)
-							.setDescription(
-								`\`${tasks.task[0].cicles}\` cicles remaining (\`${
-									tasks.task[0].cicles * 25
-								}\`) minutes in total.`
-							)
 							.setColor(client.colors.Default);
 
 						tasks.task[0].status.started = true;
@@ -263,9 +258,9 @@ export default class Timers extends Command {
 
 						interaction.reply({ embeds: [embed] });
 
-						const work = 2;
+						const work = 25;
 						let rem_work = work - 1;
-						const break_time = 1;
+						const break_time = 5;
 						const cicles = tasks.task[0].cicles;
 						let completed_cicles = 0;
 						let secs = 60;

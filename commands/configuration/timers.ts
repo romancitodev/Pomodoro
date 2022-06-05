@@ -53,7 +53,7 @@ export default class Timers extends Command {
 			async run({ client, interaction }) {
 				const subcmd = interaction.options.getSubcommand(true);
 				const tasksDB = MongoTasks.findOne({
-					serverId: interaction.guild.id,
+					server: interaction.guild.id,
 				});
 
 				const functions = {

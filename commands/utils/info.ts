@@ -97,8 +97,8 @@ export default class Help extends Command {
 							"command",
 							true
 						);
-						const cmd: Command = new (client.commands.get(command)).default();
-
+						const cmd = client.commands.get(command);
+						console.log(cmd)
 						if (!cmd)
 							return client.handleError({
 								error: await client.lang.format_message(interaction,'info.command.error01.error'),
@@ -106,38 +106,37 @@ export default class Help extends Command {
 									await client.lang.format_message(interaction,'info.command.error01.description'),
 							});
 
-						const cmdData = cmd.options;
-
+						const cmdData: Command = new(cmd).default() ;
 						embed.setTitle(await client.lang.format_message(interaction,'info.command.embed.title'));
 						embed.addFields(
 							[{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.command_name'),
-								value: `\`${cmdData.data.name}\``,
+								value: `\`${cmdData.options.data.name}\``,
 								inline: true,
 							},
 							{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.description'),
-								value: `\`${cmdData.data.description}\``,
+								value: `\`${cmdData.options.data.description}\``,
 								inline: true,
 							},
 							{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.category'),
-								value: `\`${cmdData.category}\``,
+								value: `\`${cmdData.options.category}\``,
 								inline: true,
 							},
 							{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.cooldown'),
-								value: `\`${cmdData.cooldown}\``,
+								value: `\`${cmdData.options.cooldown}\``,
 								inline: true,
 							},
 							{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.userperms'),
-								value: `\`${cmdData.userPerms.join(", ")}\``,
+								value: `\`${cmdData.options.userPerms.join(", ")}\``,
 								inline: true,
 							},
 							{
 								name: await client.lang.format_message(interaction,'info.command.embed.fields.botperms'),
-								value: `\`${cmdData.clientPerms.join(", ")}\``,
+								value: `\`${cmdData.options.clientPerms.join(", ")}\``,
 								inline: true,
 							}]
 						);

@@ -98,7 +98,7 @@ export default class Help extends Command {
 							true
 						);
 						const cmd = client.commands.get(command);
-						console.log(cmd)
+						
 						if (!cmd)
 							return client.handleError({
 								error: await client.lang.format_message(interaction,'info.command.error01.error'),

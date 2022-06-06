@@ -48,7 +48,8 @@ export default class Timers extends Command {
 				)
 				.addSubcommand((sub) =>
 					sub.setName("start").setDescription("Start your tasks.")
-				),
+			).addSubcommand((sub) => sub.setName('current').setDescription('See your current task.'))
+			,
 
 			async run({ client, interaction }) {
 				const subcmd = interaction.options.getSubcommand(true);
@@ -150,6 +151,9 @@ export default class Timers extends Command {
 							});
 
 						for (let i = 0; i < task.task.length; i++) {
+							if (task.task[i].id === id && task.task[0].status.started) {
+								return client.handleError({ error: "Task in progress", description: "You can't remove a task that is in progress." });
+							}
 							if (task.task[i].id === id) {
 								task.task.splice(i, 1);
 								break;
@@ -302,11 +306,11 @@ export default class Timers extends Command {
 								
 								await tasks.save();
 								
-								interaction.editReply({ embeds: [embed] });
+								interaction.channel?.send({ embeds: [embed] });
 								clearInterval(timer);
 								
 							} else {
-								interaction.editReply({ embeds: [TaskEmbed] })
+								interaction.channel?.send({ embeds: [TaskEmbed] })
 							}
 
 						}
@@ -316,8 +320,25 @@ export default class Timers extends Command {
 						
 
 					},
-					stop: () => {},
-					current: () => {},
+					current: async () => {
+						const tasks = await tasksDB.findOne({
+							server: interaction.guildId,
+							user: interaction.user.id,
+						});
+
+						if (!tasks || tasks.task.length < 1) return client.handleError({ error: "no tasks", description: "You doesn't have tasks already" });
+						if (!tasks.task[0].status.started) return client.handleError({ error: "started", description: "No tasks started" });
+
+						const embed = new EmbedBuilder()
+							.setTitle(`\\💻 | Tasks`)
+							.setDescription(`Your actual task is: \`${tasks.task[0].name}\``)
+							.setColor(client.colors.Default)
+						
+						interaction.reply({embeds: [embed]})
+					
+						
+
+					},
 				};
 
 				await functions[subcmd as keyof typeof functions]();
